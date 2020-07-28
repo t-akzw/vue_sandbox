@@ -9,13 +9,14 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "types": [
-      "webpack-env"
-    ],
-    "paths": {
-      "@/*": [
+   "sourceMap": true,
+   "baseUrl": ".",
+   "types": [
+     "webpack-env",
+     "vuetify"
+   ],
+   "paths": {
+     "@/*": [
         "src/*"
       ]
     },
