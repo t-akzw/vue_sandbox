@@ -2,6 +2,7 @@
   <v-app>
     <router-link to="/home">Home</router-link>
     <router-link to="/hello">Hello</router-link>
+    <router-view></router-view>
   </v-app>
 </template>
 
