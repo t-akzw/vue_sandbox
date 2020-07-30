@@ -1,18 +1,17 @@
 <template>
   <v-app>
+    <router-link to="/home">Home</router-link>
+    <router-link to="/hello">Hello</router-link>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
 
 export default Vue.extend({
   name: "App",
 
-  components: {
-    HelloWorld
-  },
+  components: {},
 
   data: () => ({
     //
