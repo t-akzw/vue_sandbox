@@ -1,12 +1,12 @@
 <template>
-  <div class="hello">Hello</div>
+  <div class="User">User {{ $route.params.id }}</div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "Hello",
+  name: "User",
 
   data: () => ({
     ecosystem: [

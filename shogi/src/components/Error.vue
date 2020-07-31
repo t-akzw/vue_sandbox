@@ -1,12 +1,12 @@
 <template>
-  <div class="hello">Hello</div>
+  <div class="Error">Error</div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 
 export default Vue.extend({
-  name: "Hello",
+  name: "Error",
 
   data: () => ({
     ecosystem: [
