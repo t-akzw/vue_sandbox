@@ -1,28 +1,28 @@
 <template>
-  <div class="hello">Hello</div>
+  <div>
+    <div class="hello">Hello {{ msg }} {{ triple }}</div>
+    <button @click="onClickButton">Click Me!</button>
+  </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { Component, Vue } from "vue-property-decorator";
 
-export default Vue.extend({
-  name: "Hello",
+@Component
+export default class Hello extends Vue {
+  msg = "World!!";
+  num = 1;
 
-  data: () => ({
-    ecosystem: [
-      {
-        text: "vuetify-loader",
-        href: "https://github.com/vuetifyjs/vuetify-loader"
-      },
-      {
-        text: "github",
-        href: "https://github.com/vuetifyjs/vuetify"
-      },
-      {
-        text: "awesome-vuetify",
-        href: "https://github.com/vuetifyjs/awesome-vuetify"
-      }
-    ]
-  })
-});
+  get triple() {
+    return this.num * 3;
+  }
+
+  onClickButton() {
+    this.num = 10;
+  }
+
+  mounted() {
+    this.num = 4;
+  }
+}
 </script>
