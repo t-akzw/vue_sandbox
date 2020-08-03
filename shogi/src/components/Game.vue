@@ -5,7 +5,7 @@
   <v-container>
     <v-row justify="center" v-for="(i, idx_row) in board" :key="idx_row" >
       <v-col v-for="(j, idx_col) in i" :key="idx_col" >
-        {{ j }}
+        <div></div>
       </v-col>
     </v-row>
   </v-container>
@@ -43,6 +43,23 @@ export default class Game extends Vue {
 //                   g: nana
 //                   h: hachi
 //                   i: kyu
+
+// TODO: domain, modelに切り出す作業
+class ShogiGame {}
+class Piece {} // 将棋の駒
+class Position {} // 駒の座標
+class King {} // 王将
+class Rook {} // 飛車
+class Bishop {} // 角行
+class GoldGeneral {} // 金将
+class SilverGeneral {} // 銀将
+class Knight {} // 桂馬
+class Lance {} // 香車
+class Pawn {} // 歩兵
+
+type File = "一" | "二" | "三" | "四" | "五" | "六" | "七" | "八" | "九" // 筋
+type Rank = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 // 段
+
 </script>
 
 <style>
