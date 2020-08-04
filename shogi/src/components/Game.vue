@@ -4,6 +4,9 @@
   <v-btn rounded color="primary" dark @click="init" >Rounded Button</v-btn>
 
   <v-container>
+    <v-row class="r1" justify="center">
+        <v-col class="c1">hoge</v-col>
+    </v-row>
     <v-row justify="center" v-for="(i, idx_row) in board" :key="idx_row" >
       <v-col v-for="(j, idx_col) in i" :key="idx_col" >
         <div>{{ j }}</div>
@@ -38,7 +41,8 @@ abstract class Piece { // 将棋の駒
     protected position: Position
     constructor(
         file: File,
-        rank: Rank
+        rank: Rank,
+        own: boolean
     ) {
         this.position = new Position(file, rank)
     }
@@ -67,28 +71,39 @@ class ShogiGame {
     private pieces = ShogiGame.makePieces()
     
     private static makePieces() {
-        const obj = new King('一', 5)
-        console.log(obj)
-        return obj
+        const king = new King('一', 5, false)
+        const king2 = new King('九', 5, true)
+        const pieces = [king, king2]
+        return pieces
+    }
+}
+
+class Board {
+    protected board: Piece[][]
+    update(pieces: Piece[]){
+        console.log(pieces)
     }
 }
 
 @Component
 export default class Game extends Vue {
-  board = [
-    ["香車", "桂馬", "銀将", "金将", "王将", "金将", "銀将", "桂馬", "香車"],
-    ["", "飛車", "", "", "", "", "", "角行", ""],
-    ["歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵"],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", ""],
-    ["歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵"],
-    ["", "角行", "", "", "", "", "", "飛車", ""],
-    ["香車", "桂馬", "銀将", "金将", "玉将", "金将", "銀将", "桂馬", "香車"]
-  ]
-  init() {
-      new ShogiGame()
-  }
+    board = [
+        ["香車", "桂馬", "銀将", "金将", "王将", "金将", "銀将", "桂馬", "香車"],
+        ["", "飛車", "", "", "", "", "", "角行", ""],
+        ["歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵"],
+        ["", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", ""],
+        ["歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵"],
+        ["", "角行", "", "", "", "", "", "飛車", ""],
+        ["香車", "桂馬", "銀将", "金将", "玉将", "金将", "銀将", "桂馬", "香車"]
+      ]
+    init() {
+        const obj = new ShogiGame()
+        console.log(obj)
+    }
+
+  // xxメソッド
 }
 // TODO: リサイズしても盤面の9x9が崩れないようにする
 // Top, 盤面とコマ置き場、色々なボタン含めた全部
