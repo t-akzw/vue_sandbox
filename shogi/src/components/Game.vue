@@ -4,12 +4,9 @@
   <v-btn rounded color="primary" dark @click="init" >Rounded Button</v-btn>
 
   <v-container>
-    <v-row class="r1" justify="center">
-        <v-col class="c1">hoge</v-col>
-    </v-row>
     <v-row justify="center" v-for="(i, idx_row) in board" :key="idx_row" >
       <v-col v-for="(j, idx_col) in i" :key="idx_col" >
-        <div>{{ j }}</div>
+        <div>{{ j.name }}</div>
       </v-col>
     </v-row>
   </v-container>
@@ -21,8 +18,8 @@
 import { Component, Vue } from "vue-property-decorator";
 
 // TODO: domain, modelに切り出す作業
-type File = "一" | "二" | "三" | "四" | "五" | "六" | "七" | "八" | "九" // 筋
-type Rank = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 // 段
+type File = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 // 筋 Col
+type Rank = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 // 段 Row
 
 class Position { // 駒の座標
     constructor(
@@ -32,19 +29,23 @@ class Position { // 駒の座標
     distanceFrom(position: Position) {
         return {
             rank: Math.abs(position.rank - this.rank),
-            file: Math.abs(position.file.charCodeAt(0) - this.file.charCodeAt(0))
+            file: Math.abs(position.file - this.file)
         }
     }
 } 
 
 abstract class Piece { // 将棋の駒
     protected position: Position
+    protected own: boolean
+    abstract name: string
+    abstract promoted_name: string
     constructor(
         file: File,
         rank: Rank,
         own: boolean
     ) {
         this.position = new Position(file, rank)
+        this.own = own
     }
     meveTo(position: Position) {
         this.position = position
@@ -52,74 +53,211 @@ abstract class Piece { // 将棋の駒
     abstract canMoveTo(position: Position): boolean
 } 
 
-class King extends Piece { // 王将
+class OpKing extends Piece {
+    name = "王将"
+    promoted_name = "王将"
     canMoveTo(position: Position) {
         const distance = this.position.distanceFrom(position)
         return distance.rank < 2 && distance.file < 2
     }
 }
 
-class Rook {} // 飛車
-class Bishop {} // 角行
-class GoldGeneral {} // 金将
-class SilverGeneral {} // 銀将
-class Knight {} // 桂馬
-class Lance {} // 香車
-class Pawn {} // 歩兵
-
-class ShogiGame {
-    private pieces = ShogiGame.makePieces()
-    
-    private static makePieces() {
-        const king = new King('一', 5, false)
-        const king2 = new King('九', 5, true)
-        const pieces = [king, king2]
-        return pieces
+class MyKing extends Piece {
+    name = "玉将"
+    promoted_name = "玉将"
+    canMoveTo(position: Position) {
+        const distance = this.position.distanceFrom(position)
+        return distance.rank < 2 && distance.file < 2
     }
 }
 
-class Board {
-    protected board: Piece[][]
-    update(pieces: Piece[]){
-        console.log(pieces)
+class Rook extends Piece {
+    name = "飛車"
+    promoted_name = "竜王"
+    canMoveTo(position: Position) {
+        const distance = this.position.distanceFrom(position)
+        return distance.rank < 2 && distance.file < 2
+    }
+}
+
+class Bishop extends Piece {
+    name = "角行"
+    promoted_name = "竜馬"
+    canMoveTo(position: Position) {
+        const distance = this.position.distanceFrom(position)
+        return distance.rank < 2 && distance.file < 2
+    }
+}
+
+class GoldGeneral extends Piece {
+    name = "金将"
+    promoted_name = "金将"
+    canMoveTo(position: Position) {
+        const distance = this.position.distanceFrom(position)
+        return distance.rank < 2 && distance.file < 2
+    }
+}
+
+class SilverGeneral extends Piece {
+    name = "銀将"
+    promoted_name = "成銀"
+    canMoveTo(position: Position) {
+        const distance = this.position.distanceFrom(position)
+        return distance.rank < 2 && distance.file < 2
+    }
+}
+class Knight extends Piece {
+    name = "桂馬"
+    promoted_name = "成桂"
+    canMoveTo(position: Position) {
+        const distance = this.position.distanceFrom(position)
+        return distance.rank < 2 && distance.file < 2
+    }
+}
+
+class Lance extends Piece {
+    name = "香車"
+    promoted_name = "成香"
+    canMoveTo(position: Position) {
+        const distance = this.position.distanceFrom(position)
+        return distance.rank < 2 && distance.file < 2
+    }
+}
+class Pawn extends Piece {
+    name = "歩兵"
+    promoted_name = "と金"
+    canMoveTo(position: Position) {
+        const distance = this.position.distanceFrom(position)
+        return distance.rank < 2 && distance.file < 2
+    }
+}
+
+class NullPiece extends Piece {
+    name = ""
+    promoted_name = ""
+    canMoveTo(position: Position) {
+        return null
+    }
+}
+
+class ShogiGame {
+    public board = ShogiGame.makeBoard()
+    private static makeBoard() {
+        return {
+            1: { 
+                1: new Lance(1, 1, false), 
+                2: new Knight(2, 1, false), 
+                3: new SilverGeneral(3, 1, false),
+                4: new GoldGeneral(4, 1, false),
+                5: new OpKing(5, 1, false),
+                6: new GoldGeneral(6, 1, false),
+                7: new SilverGeneral(7, 1, false),
+                8: new Knight(8, 1, false),
+                9: new Lance(9, 1, false),
+            },
+            2: {
+                1: new NullPiece(1, 2, false),
+                2: new Bishop(2, 2, false),
+                3: new NullPiece(3, 2, false),
+                4: new NullPiece(4, 2, false),
+                5: new NullPiece(5, 2, false),
+                6: new NullPiece(6, 2, false),
+                7: new NullPiece(7, 2, false),
+                8: new Rook(8, 2, false),
+                9: new NullPiece(9, 2, false),
+            },
+            3: {
+                1: new Pawn(1, 3, false),
+                2: new Pawn(2, 3, false),
+                3: new Pawn(3, 3, false),
+                4: new Pawn(4, 3, false),
+                5: new Pawn(5, 3, false),
+                6: new Pawn(6, 3, false),
+                7: new Pawn(7, 3, false),
+                8: new Pawn(8, 3, false),
+                9: new Pawn(9, 3, false),
+            },
+            4: {
+                1: new NullPiece(1, 4, false),
+                2: new NullPiece(2, 4, false),
+                3: new NullPiece(3, 4, false),
+                4: new NullPiece(4, 4, false),
+                5: new NullPiece(5, 4, false),
+                6: new NullPiece(6, 4, false),
+                7: new NullPiece(7, 4, false),
+                8: new NullPiece(8, 4, false),
+                9: new NullPiece(9, 4, false),
+            },
+            5: {
+                1: new NullPiece(1, 5, false),
+                2: new NullPiece(2, 5, false),
+                3: new NullPiece(3, 5, false),
+                4: new NullPiece(4, 5, false),
+                5: new NullPiece(5, 5, false),
+                6: new NullPiece(6, 5, false),
+                7: new NullPiece(7, 5, false),
+                8: new NullPiece(8, 5, false),
+                9: new NullPiece(9, 5, false),
+            },
+            6: {
+                1: new NullPiece(1, 6, false),
+                2: new NullPiece(2, 6, false),
+                3: new NullPiece(3, 6, false),
+                4: new NullPiece(4, 6, false),
+                5: new NullPiece(5, 6, false),
+                6: new NullPiece(6, 6, false),
+                7: new NullPiece(7, 6, false),
+                8: new NullPiece(8, 6, false),
+                9: new NullPiece(9, 6, false),
+            },
+            7: {
+                1: new Pawn(1, 7, true),
+                2: new Pawn(2, 7, true),
+                3: new Pawn(3, 7, true),
+                4: new Pawn(4, 7, true),
+                5: new Pawn(5, 7, true),
+                6: new Pawn(6, 7, true),
+                7: new Pawn(7, 7, true),
+                8: new Pawn(8, 7, true),
+                9: new Pawn(9, 7, true),
+            },
+            8: {
+                1: new NullPiece(1, 8, false),
+                2: new Rook(2, 8, true),
+                3: new NullPiece(1, 8, false),
+                4: new NullPiece(1, 8, false),
+                5: new NullPiece(1, 8, false),
+                6: new NullPiece(1, 8, false),
+                7: new NullPiece(1, 8, false),
+                8: new Bishop(8, 8, true),
+                9: new NullPiece(9, 8, false),
+            },
+            9: { 
+                1: new Lance(1, 9, true), 
+                2: new Knight(2, 9, true), 
+                3: new SilverGeneral(3, 9, true),
+                4: new GoldGeneral(4, 9, true),
+                5: new MyKing(5, 9, true),
+                6: new GoldGeneral(6, 9, true),
+                7: new SilverGeneral(7, 9, true),
+                8: new Knight(8, 9, true),
+                9: new Lance(9, 9, true),
+            },
+        }
     }
 }
 
 @Component
 export default class Game extends Vue {
-    board = [
-        ["香車", "桂馬", "銀将", "金将", "王将", "金将", "銀将", "桂馬", "香車"],
-        ["", "飛車", "", "", "", "", "", "角行", ""],
-        ["歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵"],
-        ["", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", ""],
-        ["歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵", "歩兵"],
-        ["", "角行", "", "", "", "", "", "飛車", ""],
-        ["香車", "桂馬", "銀将", "金将", "玉将", "金将", "銀将", "桂馬", "香車"]
-      ]
+    board = {}
     init() {
         const obj = new ShogiGame()
-        console.log(obj)
+        this.board = obj.board
     }
 
   // xxメソッド
 }
 // TODO: リサイズしても盤面の9x9が崩れないようにする
-// Top, 盤面とコマ置き場、色々なボタン含めた全部
-// Ban, 盤面
-// 9 8 7 6 5 4 3 2 1
-//                   a: ich
-//                   b: ni
-//                   c: san
-//                   d: shi
-//                   e: go
-//                   f: roku
-//                   g: nana
-//                   h: hachi
-//                   i: kyu
-
-
 
 </script>
 
