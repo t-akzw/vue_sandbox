@@ -6,7 +6,7 @@
   <v-container>
     <v-row justify="center" v-for="(i, idx_row) in board" :key="idx_row" >
       <v-col v-for="(j, idx_col) in i" :key="idx_col" >
-        <div>{{ j.name }}</div>
+          <v-btn @click="hoge(idx_row, idx_col)">{{ j.name }}</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -136,7 +136,7 @@ class NullPiece extends Piece {
     name = ""
     promoted_name = ""
     canMoveTo(position: Position) {
-        return null
+        return false
     }
 }
 
@@ -253,12 +253,21 @@ export default class Game extends Vue {
     init() {
         const obj = new ShogiGame()
         this.board = obj.board
+        // 状態をDBにセットする必要がある
+    }
+    hoge(i, j) {
+        this.board[i][j] = new MyKing(i, j, false)
     }
 
   // xxメソッド
 }
 // TODO: リサイズしても盤面の9x9が崩れないようにする
-
+// TODO: DBに持つべきものは、盤面、駒の動き、持ち駒のリスト
+// TODO: 持ち駒フィールドの用意
+// TODO: 手番の実装
+// TODO: 駒のnameの持ち方
+// TODO: boardの型
+// TODO: 
 </script>
 
 <style>
