@@ -1,5 +1,7 @@
 <template>
   <div class="Top">
+    <img src="@/assets/koma/kinkuro/MyKing.svg" alt="">
+    <div id="pentagon">aa</div>
     <div class="Game">Game {{ $route.params.id }}</div>
     <v-btn rounded color="primary" dark @click="init">Rounded Button</v-btn>
 
@@ -251,7 +253,10 @@ class ShogiGame {
   }
 }
 
-@Component
+@Component({
+    components: {
+    }
+})
 export default class Game extends Vue {
   board = {};
   state = false;
@@ -277,6 +282,7 @@ export default class Game extends Vue {
 
   // xxメソッド
 }
+// TODO1: ボタンから将棋の駒に変更する、div要素で@clickによってcssを変更する
 // TODO: リサイズしても盤面の9x9が崩れないようにする
 // TODO: DBに持つべきものは、盤面、駒の動き、持ち駒のリスト
 // TODO: 持ち駒フィールドの用意
@@ -286,4 +292,5 @@ export default class Game extends Vue {
 // TODO:
 </script>
 
-<style></style>
+<style>
+</style>
