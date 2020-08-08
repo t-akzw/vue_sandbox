@@ -1,7 +1,5 @@
 <template>
   <div class="Top">
-    <img src="@/assets/koma/kinkuro/MyKing.svg" alt="">
-    <div id="pentagon">aa</div>
     <div class="Game">Game {{ $route.params.id }}</div>
     <v-btn rounded color="primary" dark @click="init">Rounded Button</v-btn>
 
@@ -9,6 +7,7 @@
       <v-row justify="center" v-for="(i, idx_row) in board" :key="idx_row">
         <v-col v-for="(j, idx_col) in i" :key="idx_col">
           <v-btn :disabled="hoge(idx_row, idx_col)" @click="holding(idx_row, idx_col)">{{ j.name }}</v-btn>
+          <div id="pentagon"><img :src="hoge2(idx_row, idx_col)" alt=""></div>
         </v-col>
       </v-row>
     </v-container>
@@ -40,15 +39,23 @@ abstract class Piece {
   public state: boolean;
   abstract name: string;
   abstract promoted_name: string;
+  public promoted: boolean;
+  public img: string;
   constructor(file: File, rank: Rank, own: boolean) {
     this.position = new Position(file, rank);
     this.own = own;
     this.state = false;
+    this.promoted = false;
+    this.img = this.getImgString();
   }
   meveTo(position: Position) {
     this.position = position;
   }
   abstract canMoveTo(position: Position): boolean;
+  getImgString(): string {
+      const promotedIdx = (this.promoted)? "x" : "";
+      return "/img/koma/kinkuro/" + promotedIdx + this.constructor.name + ".svg"
+  }
 }
 
 class OpKing extends Piece {
@@ -254,8 +261,8 @@ class ShogiGame {
 }
 
 @Component({
-    components: {
-    }
+  components: {
+  }
 })
 export default class Game extends Vue {
   board = {};
@@ -271,13 +278,17 @@ export default class Game extends Vue {
   // }
   holding(i, j) {
     console.log(i, j);
-    console.log(this.board[i][j])
+    console.log("hogehoge", this.board[i][j].getImgString())
     this.board[i][j].state = true;
   }
 
   hoge(i, j) {
     console.log("hoge");
     return this.board[i][j].state;
+  }
+
+  hoge2(i, j) {
+    return this.board[i][j].img;
   }
 
   // xxメソッド
