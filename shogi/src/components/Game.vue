@@ -1,16 +1,18 @@
 <template>
-  <div class="Top">
-    <div class="Game">Game {{ $route.params.id }}</div>
-    <v-btn rounded color="primary" dark @click="init">Rounded Button</v-btn>
+    <div class="Top">
+        <div class="Game">Game {{ $route.params.id }}</div>
+        <v-btn rounded color="primary" dark @click="init">Rounded Button</v-btn>
 
-    <v-container>
-      <v-row justify="center" v-for="(i, idx_row) in board" :key="idx_row" cols="8">
-        <v-col v-for="(j, idx_col) in i" :key="idx_col">
-          <div><img class="piece" :src="hoge2(idx_row, idx_col)" alt=""></div>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+        <div class="container">
+            <div class="hoge">
+                <div justify="center" v-for="(i, idx_row) in board" :key="idx_row" class="rowxx">
+                    <div v-for="(j, idx_col) in i" :key="idx_col" class="colxx">
+                        <img class="piece" :src="hoge2(idx_col, idx_row)" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -296,7 +298,44 @@ export default class Game extends Vue {
 
 <style>
 img.piece {
-  width: 2rem;
-  height: 100%;
+  width: 70%;
+  height: 70%;
+}
+.hoge {
+    position: absolute;
+    display: grid; /* グリッドレイアウト */
+    grid-template-columns: repeat(9, 1fr);
+            top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+}
+div.Top {
+    width: 100%;
+    position: relative;
+
+}
+.container {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.container:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+}
+.colxx {
+    width: 100%;
+    height: 100%;
+}
+.rowxx {
+    width: 100%;
+    height: 11%;
+}
+.User {
+    height: 100%;
+    width: 100%;
 }
 </style>
