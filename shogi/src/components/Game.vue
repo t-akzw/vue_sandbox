@@ -58,18 +58,9 @@ abstract class Piece {
   }
 }
 
-class OpKing extends Piece {
+class King extends Piece {
   name = "王将";
   promoted_name = "王将";
-  canMoveTo(position: Position) {
-    const distance = this.position.distanceFrom(position);
-    return distance.rank < 2 && distance.file < 2;
-  }
-}
-
-class MyKing extends Piece {
-  name = "玉将";
-  promoted_name = "玉将";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
     return distance.rank < 2 && distance.file < 2;
@@ -162,7 +153,7 @@ class ShogiGame {
         2: new Knight(2, 1, false),
         3: new SilverGeneral(3, 1, false),
         4: new GoldGeneral(4, 1, false),
-        5: new OpKing(5, 1, false),
+        5: new King(5, 1, false),
         6: new GoldGeneral(6, 1, false),
         7: new SilverGeneral(7, 1, false),
         8: new Knight(8, 1, false),
@@ -250,7 +241,7 @@ class ShogiGame {
         2: new Knight(2, 9, true),
         3: new SilverGeneral(3, 9, true),
         4: new GoldGeneral(4, 9, true),
-        5: new MyKing(5, 9, true),
+        5: new King(5, 9, true),
         6: new GoldGeneral(6, 9, true),
         7: new SilverGeneral(7, 9, true),
         8: new Knight(8, 9, true),
