@@ -4,10 +4,9 @@
     <v-btn rounded color="primary" dark @click="init">Rounded Button</v-btn>
 
     <v-container>
-      <v-row justify="center" v-for="(i, idx_row) in board" :key="idx_row">
+      <v-row justify="center" v-for="(i, idx_row) in board" :key="idx_row" cols="8">
         <v-col v-for="(j, idx_col) in i" :key="idx_col">
-          <v-btn :disabled="hoge(idx_row, idx_col)" @click="holding(idx_row, idx_col)">{{ j.name }}</v-btn>
-          <div id="pentagon"><img :src="hoge2(idx_row, idx_col)" alt=""></div>
+          <div><img class="piece" :src="hoge2(idx_row, idx_col)" alt=""></div>
         </v-col>
       </v-row>
     </v-container>
@@ -54,7 +53,8 @@ abstract class Piece {
   abstract canMoveTo(position: Position): boolean;
   getImgString(): string {
       const promotedIdx = (this.promoted)? "x" : "";
-      return "/img/koma/kinkuro/" + promotedIdx + this.constructor.name + ".svg"
+      const ownIdx = (this.own)? "My" : "Op";
+      return "/img/koma/default/" + promotedIdx + ownIdx + this.constructor.name + ".svg"
   }
 }
 
@@ -304,4 +304,8 @@ export default class Game extends Vue {
 </script>
 
 <style>
+img.piece {
+  width: 2rem;
+  height: 100%;
+}
 </style>
