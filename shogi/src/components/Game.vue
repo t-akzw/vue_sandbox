@@ -3,14 +3,16 @@
         <div class="Game">Game {{ $route.params.id }}</div>
         <v-btn rounded color="primary" dark @click="init">Rounded Button</v-btn>
                 <div class="opholding" >
-                    <img class="piece" :src="hoge3(0)" alt="">
+                    <div><img class="piece" :src="hoge3(0)" alt=""></div>
                 </div>
 
-        <div class="container">
-            <div class="hoge">
-                <div justify="center" v-for="(i, idx_row) in board" :key="idx_row" class="rowxx">
-                    <div v-for="(j, idx_col) in i" :key="idx_col" class="colxx">
-                        <img class="piece" :src="hoge2(idx_col, idx_row)" alt="">
+        <div class="ban">
+            <div class="container">
+                <div class="hoge">
+                    <div justify="center" v-for="(i, idx_row) in board" :key="idx_row" class="rowxx">
+                        <div v-for="(j, idx_col) in i" :key="idx_col" class="colxx">
+                            <img class="piece" :src="hoge2(idx_col, idx_row)" alt="">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -372,5 +374,12 @@ div.container {
 .User {
     height: 100%;
     width: 100%;
+}
+div.opholding {
+    background-color: #FDF8ED;
+}
+
+div.ban {
+    padding: 1rem;
 }
 </style>
