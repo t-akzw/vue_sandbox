@@ -2,6 +2,9 @@
     <div class="Top">
         <div class="Game">Game {{ $route.params.id }}</div>
         <v-btn rounded color="primary" dark @click="init">Rounded Button</v-btn>
+                <div class="opholding" >
+                    <img class="piece" :src="hoge3(0)" alt="">
+                </div>
 
         <div class="container">
             <div class="hoge">
@@ -19,8 +22,9 @@
 import { Component, Vue } from "vue-property-decorator";
 
 // TODO: domain, modelに切り出す作業
-type File = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9; // 筋 Col
-type Rank = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9; // 段 Row
+// 0は持ち駒状態
+type File = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9; // 筋 Col
+type Rank = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9; // 段 Row
 
 class Position {
   // 駒の座標
@@ -259,6 +263,8 @@ class ShogiGame {
 })
 export default class Game extends Vue {
   board = {};
+  myHolding = [ (new Lance(0, 0, true)) ];
+  opHolding = [ (new Lance(0, 0, false)) ];
   state = false;
   init() {
     const obj = new ShogiGame();
@@ -284,6 +290,9 @@ export default class Game extends Vue {
     return this.board[i][j].img;
   }
 
+  hoge3(i) {
+      return this.opHolding[i].img;
+  }
   // xxメソッド
 }
 // TODO1: ボタンから将棋の駒に変更する、div要素で@clickによってcssを変更する
@@ -316,7 +325,7 @@ img.piece {
     padding-top: 100%;
 }
 div.Top {
-    width: 100%;
+    width: 70%;
     position: relative;
 
 }
@@ -324,16 +333,33 @@ div.Top {
     width: 100%;
     position: relative;
     overflow: hidden;
+    background-color: #FDF8ED;
 }
 
 .container:before {
     content: "";
     display: block;
     padding-top: 100%;
+    border: 1px solid #565451;
 }
+div.container {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
 .colxx {
+    border-top: 1px solid #565451;
+    border-left: 1px solid #565451;
     width: 100%;
     height: 100%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    vertical-align: middle;
+    display: -webkit-flex;
 }
 .rowxx {
     width: 100%;
