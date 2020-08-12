@@ -3,7 +3,7 @@
         <div class="Game">Game {{ $route.params.id }}</div>
         <v-btn rounded color="primary" dark @click="init">Rounded Button</v-btn>
                 <div class="opholding" >
-                    <div><img class="piece" :src="hoge3(0)" alt=""></div>
+                    <div class="sub_opholding"><img class="piece" :src="hoge3(0)" alt=""></div>
                 </div>
 
         <div class="ban">
@@ -375,11 +375,15 @@ div.container {
     height: 100%;
     width: 100%;
 }
-div.opholding {
-    background-color: #FDF8ED;
+div.sub_opholding {
+    padding: 1rem;
 }
 
 div.ban {
     padding: 1rem;
+    background-color: #FDF8ED;
+}
+div.opholding {
+    background-color: #dbb25a;
 }
 </style>
