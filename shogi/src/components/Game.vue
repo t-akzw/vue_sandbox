@@ -139,7 +139,8 @@ class Knight extends Piece {
   promoted_name = "成桂";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return distance.rank < 2 && distance.file < 2;
+    return (distance.rank == -2 && distance.file == -1) ||
+           (distance.rank == -2 && distance.file == 1);
   }
 }
 
@@ -336,6 +337,8 @@ export default class Game extends Vue {
 // TODO: 駒のnameの持ち方
 // TODO: boardの型
 // TODO: 盤面の配列と将棋の読み方がずれているので直す
+// TODO: NullPieceのclickをdisableにする
+// TODO: 桂馬などの自動で成る判定はtoPromoteで実装、移動では考慮しない
 </script>
 
 <style>
