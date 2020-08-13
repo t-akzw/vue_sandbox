@@ -3,7 +3,12 @@
         <div class="Game">Game {{ $route.params.id }}</div>
         <v-btn rounded color="primary" dark @click="init">Rounded Button</v-btn>
                 <div class="opholding" >
-                    <div class="sub_opholding"><img class="piece" :src="hoge3(0)" alt=""></div>
+                    <div class="sub_opholding">
+                        <img class="piece" :src="hoge3(0)" alt="">
+                    </div>
+                    <div class="sub_opholding">
+                        <img class="piece" :src="hoge3(0)" alt="">
+                    </div>
                 </div>
 
         <div class="ban">
@@ -17,6 +22,14 @@
                 </div>
             </div>
         </div>
+                <div class="myholding" >
+                    <div class="sub_myholding">
+                        <img class="piece" :src="hoge4(0)" alt="">
+                    </div>
+                    <div class="sub_myholding">
+                        <img class="piece" :src="hoge4(0)" alt="">
+                    </div>
+                </div>
     </div>
 </template>
 
@@ -265,8 +278,8 @@ class ShogiGame {
 })
 export default class Game extends Vue {
   board = {};
-  myHolding = [ (new Lance(0, 0, true)) ];
-  opHolding = [ (new Lance(0, 0, false)) ];
+  myHolding = [ (new Lance(0, 0, true)), new Lance(0, 0, false) ];
+  opHolding = [ (new Lance(0, 0, false)), new Lance(0, 0, false)];
   state = false;
   init() {
     const obj = new ShogiGame();
@@ -294,6 +307,9 @@ export default class Game extends Vue {
 
   hoge3(i) {
       return this.opHolding[i].img;
+  }
+  hoge4(i) {
+      return this.myHolding[i].img;
   }
   // xxメソッド
 }
@@ -375,15 +391,20 @@ div.container {
     height: 100%;
     width: 100%;
 }
-div.sub_opholding {
-    padding: 1rem;
-}
-
 div.ban {
     padding: 1rem;
     background-color: #FDF8ED;
 }
 div.opholding {
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    background-color: #dbb25a;
+}
+div.myholding {
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
     background-color: #dbb25a;
 }
 </style>
