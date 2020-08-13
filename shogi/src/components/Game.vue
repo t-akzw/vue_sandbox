@@ -113,7 +113,8 @@ class Bishop extends Piece {
   promoted_name = "竜馬";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return distance.rank < 2 && distance.file < 2;
+    return !(distance.file == 0 && distance.rank == 0) &&
+        (Math.abs(distance.file) == Math.abs(distance.rank));
   }
 }
 
