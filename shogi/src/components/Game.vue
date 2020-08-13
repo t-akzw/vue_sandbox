@@ -122,7 +122,9 @@ class GoldGeneral extends Piece {
   promoted_name = "金将";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return distance.rank < 2 && distance.file < 2;
+    return (distance.rank == -1 && Math.abs(distance.file) < 2) ||
+        (distance.rank == 0 && 0 < Math.abs(distance.file) && Math.abs(distance.file) < 2) ||
+        (distance.rank == 1 && distance.file == 0 );
   }
 }
 
@@ -131,7 +133,8 @@ class SilverGeneral extends Piece {
   promoted_name = "成銀";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return distance.rank < 2 && distance.file < 2;
+    return (distance.rank == -1 && Math.abs(distance.file) < 2) ||
+        (distance.rank == 1 && (distance.file == -1 || distance.file == 1));
   }
 }
 class Knight extends Piece {
@@ -140,7 +143,7 @@ class Knight extends Piece {
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
     return (distance.rank == -2 && distance.file == -1) ||
-           (distance.rank == -2 && distance.file == 1);
+        (distance.rank == -2 && distance.file == 1);
   }
 }
 
@@ -180,6 +183,7 @@ abstract class Captured {
 class ShogiGame {
   public board = ShogiGame.makeBoard();
   private static makeBoard() {
+    // TODO: 駒のfile, rankは手動で設定せずに自動で入れたい
     return {
       1: {
         1: new Lance(1, 1, false),
@@ -261,12 +265,13 @@ class ShogiGame {
       8: {
         1: new NullPiece(1, 8, true),
         2: new Bishop(2, 8, true),
-        3: new NullPiece(1, 8, true),
-        4: new NullPiece(1, 8, true),
-        5: new NullPiece(1, 8, true),
-        6: new NullPiece(1, 8, true),
-        7: new NullPiece(1, 8, true),
-        8: new Rook(8, 8, true),
+        3: new NullPiece(3, 8, true),
+        4: new NullPiece(4, 8, true),
+        5: new NullPiece(5, 8, true),
+        6: new NullPiece(6, 8, true),
+        7: new NullPiece(7, 8, true),
+        8: new GoldGeneral(8, 8, true),
+        //8: new Rook(8, 8, true),
         9: new NullPiece(9, 8, false),
       },
       9: {
@@ -339,6 +344,8 @@ export default class Game extends Vue {
 // TODO: 盤面の配列と将棋の読み方がずれているので直す
 // TODO: NullPieceのclickをdisableにする
 // TODO: 桂馬などの自動で成る判定はtoPromoteで実装、移動では考慮しない
+// TODO: 盤面にマルポチを4箇所入れる
+// TODO: 敵駒は動きが変わるので対応を入れる
 </script>
 
 <style>
