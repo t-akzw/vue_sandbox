@@ -16,7 +16,7 @@
                 <div class="hoge">
                     <div justify="center" v-for="(i, idx_row) in board" :key="idx_row" class="rowxx">
                         <div v-for="(j, idx_col) in i" :key="idx_col" class="colxx">
-                            <img class="piece" :src="hoge2(idx_col, idx_row)" alt="">
+                            <img class="piece" :src="hoge2(idx_col, idx_row)" alt="" @click="toMove(idx_col, idx_row)">
                         </div>
                     </div>
                 </div>
@@ -46,21 +46,22 @@ class Position {
   constructor(private file: File, private rank: Rank) {}
   distanceFrom(position: Position) {
     return {
-      rank: Math.abs(position.rank - this.rank),
-      file: Math.abs(position.file - this.file)
+      rank: position.rank - this.rank,
+      file: position.file - this.file
     };
   }
 }
 
 abstract class Piece {
   // 将棋の駒
-  protected position: Position;
+  public position: Position;
   protected own: boolean;
   public state: boolean;
   abstract name: string;
   abstract promoted_name: string;
   public promoted: boolean;
   public img: string;
+  public moveList: boolean[];
   constructor(file: File, rank: Rank, own: boolean) {
     this.position = new Position(file, rank);
     this.own = own;
@@ -70,6 +71,16 @@ abstract class Piece {
   }
   meveTo(position: Position) {
     this.position = position;
+  }
+  canPotentialMoveTo(board: any) {
+    console.log("hogehoge")
+    for (let i = 1; i < 10; i++) {
+        for (let j = 1; j < 10; j++) {
+            console.log(i,j, board[i][j].name)
+            console.log(this.canMoveTo(board[i][j].position))
+        }
+    }
+    return true
   }
   abstract canMoveTo(position: Position): boolean;
   getImgString(): string {
@@ -145,7 +156,7 @@ class Pawn extends Piece {
   promoted_name = "と金";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return distance.rank < 2 && distance.file < 2;
+    return distance.rank == -1 && distance.file == 0;
   }
 }
 
@@ -311,6 +322,10 @@ export default class Game extends Vue {
   hoge4(i) {
       return this.myHolding[i].img;
   }
+  toMove(i, j) {
+      console.log("tomove", i, j)
+      console.log(this.board[i][j].canPotentialMoveTo(this.board))
+  }
   // xxメソッド
 }
 // TODO1: ボタンから将棋の駒に変更する、div要素で@clickによってcssを変更する
@@ -320,7 +335,7 @@ export default class Game extends Vue {
 // TODO: 手番の実装
 // TODO: 駒のnameの持ち方
 // TODO: boardの型
-// TODO:
+// TODO: 盤面の配列と将棋の読み方がずれているので直す
 </script>
 
 <style>
