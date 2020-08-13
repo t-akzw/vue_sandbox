@@ -148,7 +148,7 @@ class Lance extends Piece {
   promoted_name = "成香";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return distance.rank < 2 && distance.file < 2;
+    return distance.rank < 0 && distance.file == 0;
   }
 }
 class Pawn extends Piece {
@@ -258,13 +258,13 @@ class ShogiGame {
         9: new Pawn(9, 7, true),
       },
       8: {
-        1: new NullPiece(1, 8, false),
+        1: new NullPiece(1, 8, true),
         2: new Bishop(2, 8, true),
-        3: new NullPiece(1, 8, false),
-        4: new NullPiece(1, 8, false),
-        5: new NullPiece(1, 8, false),
-        6: new NullPiece(1, 8, false),
-        7: new NullPiece(1, 8, false),
+        3: new NullPiece(1, 8, true),
+        4: new NullPiece(1, 8, true),
+        5: new NullPiece(1, 8, true),
+        6: new NullPiece(1, 8, true),
+        7: new NullPiece(1, 8, true),
         8: new Rook(8, 8, true),
         9: new NullPiece(9, 8, false),
       },
