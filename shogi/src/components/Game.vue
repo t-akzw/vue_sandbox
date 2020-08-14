@@ -155,15 +155,16 @@ class Lance extends Piece {
   promoted_name = "成香";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return distance.rank < 0 && distance.file == 0;
+    const val = (this.own)? (distance.rank < 0) : (distance.rank > 0)
+    return val && distance.file == 0;
   }
 }
 class Pawn extends Piece {
   name = "歩兵";
   promoted_name = "と金";
   canMoveTo(position: Position) {
-    const val = (this.own)? -1 : 1
     const distance = this.position.distanceFrom(position);
+    const val = (this.own)? -1 : 1
     return distance.rank == val && distance.file == 0;
   }
 }
