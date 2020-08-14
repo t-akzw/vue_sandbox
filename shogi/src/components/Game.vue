@@ -95,7 +95,8 @@ class King extends Piece {
   promoted_name = "王将";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return distance.rank < 2 && distance.file < 2;
+    return !(distance.file == 0 && distance.rank == 0) &&
+        (Math.abs(distance.file) < 2 && Math.abs(distance.rank) < 2);
   }
 }
 
@@ -269,7 +270,7 @@ class ShogiGame {
         2: new Bishop(2, 8, true),
         3: new NullPiece(3, 8, true),
         4: new NullPiece(4, 8, true),
-        5: new NullPiece(5, 8, true),
+        5: new King(5, 8, true),
         6: new NullPiece(6, 8, true),
         7: new NullPiece(7, 8, true),
         8: new Rook(8, 8, true),
