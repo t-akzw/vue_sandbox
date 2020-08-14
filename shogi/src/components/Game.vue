@@ -136,8 +136,9 @@ class SilverGeneral extends Piece {
   promoted_name = "成銀";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return (distance.rank == -1 && Math.abs(distance.file) < 2) ||
-        (distance.rank == 1 && (distance.file == -1 || distance.file == 1));
+    const val = (this.own)? -1 : 1
+    return (distance.rank == val && Math.abs(distance.file) < 2) ||
+        (distance.rank == -val && (distance.file == -1 || distance.file == 1));
   }
 }
 class Knight extends Piece {
@@ -204,7 +205,7 @@ class ShogiGame {
       },
       2: {
         1: new NullPiece(1, 2, false),
-        2: new Rook(2, 2, false),
+        2: new GoldGeneral(2, 2, false),
         3: new NullPiece(3, 2, false),
         4: new NullPiece(4, 2, false),
         5: new NullPiece(5, 2, false),
@@ -276,7 +277,7 @@ class ShogiGame {
         5: new NullPiece(5, 8, true),
         6: new NullPiece(6, 8, true),
         7: new NullPiece(7, 8, true),
-        8: new Rook(8, 8, true),
+        8: new GoldGeneral(8, 8, true),
         9: new NullPiece(9, 8, false),
       },
       9: {
