@@ -162,8 +162,9 @@ class Pawn extends Piece {
   name = "歩兵";
   promoted_name = "と金";
   canMoveTo(position: Position) {
+    const val = (this.own)? -1 : 1
     const distance = this.position.distanceFrom(position);
-    return distance.rank == -1 && distance.file == 0;
+    return distance.rank == val && distance.file == 0;
   }
 }
 
@@ -270,7 +271,7 @@ class ShogiGame {
         2: new Bishop(2, 8, true),
         3: new NullPiece(3, 8, true),
         4: new NullPiece(4, 8, true),
-        5: new King(5, 8, true),
+        5: new NullPiece(5, 8, true),
         6: new NullPiece(6, 8, true),
         7: new NullPiece(7, 8, true),
         8: new Rook(8, 8, true),
