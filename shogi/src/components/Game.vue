@@ -125,9 +125,10 @@ class GoldGeneral extends Piece {
   promoted_name = "金将";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return (distance.rank == -1 && Math.abs(distance.file) < 2) ||
+    const val = (this.own)? -1 : 1;
+    return (distance.rank == val && Math.abs(distance.file) < 2) ||
         (distance.rank == 0 && 0 < Math.abs(distance.file) && Math.abs(distance.file) < 2) ||
-        (distance.rank == 1 && distance.file == 0 );
+        (distance.rank == -val && distance.file == 0 );
   }
 }
 
