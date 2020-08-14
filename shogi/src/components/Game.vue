@@ -145,8 +145,9 @@ class Knight extends Piece {
   promoted_name = "成桂";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return (distance.rank == -2 && distance.file == -1) ||
-        (distance.rank == -2 && distance.file == 1);
+    const val = (this.own)? -2 : 2
+    return (distance.rank == val && distance.file == -1) ||
+        (distance.rank == val && distance.file == 1);
   }
 }
 
