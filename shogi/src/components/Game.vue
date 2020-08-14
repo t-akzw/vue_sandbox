@@ -104,7 +104,8 @@ class Rook extends Piece {
   promoted_name = "竜王";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return distance.rank < 2 && distance.file < 2;
+    return !(distance.file == 0 && distance.rank == 0) &&
+        (distance.file == 0 || distance.rank == 0)
   }
 }
 
@@ -271,8 +272,7 @@ class ShogiGame {
         5: new NullPiece(5, 8, true),
         6: new NullPiece(6, 8, true),
         7: new NullPiece(7, 8, true),
-        8: new GoldGeneral(8, 8, true),
-        //8: new Rook(8, 8, true),
+        8: new Rook(8, 8, true),
         9: new NullPiece(9, 8, false),
       },
       9: {
