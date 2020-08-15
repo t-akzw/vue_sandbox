@@ -16,7 +16,7 @@
                 <div class="hoge">
                     <div justify="center" v-for="(i, idx_row) in board" :key="idx_row" class="rowxx">
                         <div v-for="(j, idx_col) in i" :key="idx_col" class="colxx">
-                            <img class="piece" :src="hoge2(idx_col, idx_row)" alt="" @click="toMove(idx_col, idx_row)">
+                            <img class="piece" :src="hoge2(idx_col, idx_row)" @click="toMove(idx_col, idx_row)" alt="">
                         </div>
                     </div>
                 </div>
@@ -83,10 +83,25 @@ abstract class Piece {
     return true
   }
   abstract canMoveTo(position: Position): boolean;
+  defaultCanMoveTo(position: Position): boolean {
+    const distance = this.position.distanceFrom(position);
+    const val = (this.own)? -1 : 1;
+    return (distance.rank == val && Math.abs(distance.file) < 2) ||
+        (distance.rank == 0 && 0 < Math.abs(distance.file) && Math.abs(distance.file) < 2) ||
+        (distance.rank == -val && distance.file == 0 );
+  }
   getImgString(): string {
       const promotedIdx = (this.promoted)? "x" : "";
       const ownIdx = (this.own)? "My" : "Op";
       return "/img/koma/default/" + promotedIdx + ownIdx + this.constructor.name + ".svg"
+  }
+}
+
+class GoldGeneral extends Piece {
+  name = "金将";
+  promoted_name = "金将";
+  canMoveTo(position: Position) {
+    return this.defaultCanMoveTo(position)
   }
 }
 
@@ -106,7 +121,10 @@ class Rook extends Piece {
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
     return !(distance.file == 0 && distance.rank == 0) &&
-        (distance.file == 0 || distance.rank == 0)
+        (
+            (distance.file == 0 || distance.rank == 0) ||
+            (Math.abs(distance.file) < 2 && Math.abs(distance.rank) < 2)
+        )
   }
 }
 
@@ -116,19 +134,10 @@ class Bishop extends Piece {
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
     return !(distance.file == 0 && distance.rank == 0) &&
-        (Math.abs(distance.file) == Math.abs(distance.rank));
-  }
-}
-
-class GoldGeneral extends Piece {
-  name = "金将";
-  promoted_name = "金将";
-  canMoveTo(position: Position) {
-    const distance = this.position.distanceFrom(position);
-    const val = (this.own)? -1 : 1;
-    return (distance.rank == val && Math.abs(distance.file) < 2) ||
-        (distance.rank == 0 && 0 < Math.abs(distance.file) && Math.abs(distance.file) < 2) ||
-        (distance.rank == -val && distance.file == 0 );
+        (
+            (Math.abs(distance.file) == Math.abs(distance.rank)) ||
+            (Math.abs(distance.file) < 2 && Math.abs(distance.rank) < 2)
+        );
   }
 }
 
@@ -138,7 +147,8 @@ class SilverGeneral extends Piece {
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
     const val = (this.own)? -1 : 1
-    return (distance.rank == val && Math.abs(distance.file) < 2) ||
+    return (this.promoted)? this.defaultCanMoveTo(position) : 
+        (distance.rank == val && Math.abs(distance.file) < 2) ||
         (distance.rank == -val && (distance.file == -1 || distance.file == 1));
   }
 }
@@ -158,7 +168,7 @@ class Lance extends Piece {
   promoted_name = "成香";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    const val = (this.own)? (distance.rank < 0) : (distance.rank > 0)
+    const val = (this.own)? (distance.rank < 0) : (distance.rank > 0);
     return val && distance.file == 0;
   }
 }
@@ -167,7 +177,7 @@ class Pawn extends Piece {
   promoted_name = "と金";
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    const val = (this.own)? -1 : 1
+    const val = (this.own)? -1 : 1;
     return distance.rank == val && distance.file == 0;
   }
 }
@@ -206,7 +216,7 @@ class ShogiGame {
       },
       2: {
         1: new NullPiece(1, 2, false),
-        2: new GoldGeneral(2, 2, false),
+        2: new Rook(2, 2, false),
         3: new NullPiece(3, 2, false),
         4: new NullPiece(4, 2, false),
         5: new NullPiece(5, 2, false),
@@ -278,7 +288,7 @@ class ShogiGame {
         5: new NullPiece(5, 8, true),
         6: new NullPiece(6, 8, true),
         7: new NullPiece(7, 8, true),
-        8: new GoldGeneral(8, 8, true),
+        8: new Rook(8, 8, true),
         9: new NullPiece(9, 8, false),
       },
       9: {
@@ -309,11 +319,11 @@ export default class Game extends Vue {
     const obj = new ShogiGame();
     this.board = obj.board;
     console.log(this.board[1][1])
+    this.board[9][7].promoted = true
+    console.log(this.board[9][7])
+    console.log(this.board[9][7].getImgString())
     // 状態をDBにセットする必要がある
   }
-  // hoge(i, j) {
-  //     this.board[i][j] = new MyKing(i, j, false)
-  // }
   holding(i, j) {
     console.log(i, j);
     console.log("hogehoge", this.board[i][j].getImgString())
@@ -352,7 +362,6 @@ export default class Game extends Vue {
 // TODO: NullPieceのclickをdisableにする
 // TODO: 桂馬などの自動で成る判定はtoPromoteで実装、移動では考慮しない
 // TODO: 盤面にマルポチを4箇所入れる
-// TODO: 敵駒は動きが変わるので対応を入れる
 </script>
 
 <style>
