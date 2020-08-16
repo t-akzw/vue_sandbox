@@ -361,7 +361,6 @@ export default class Game extends Vue {
 // TODO: 盤面の配列と将棋の読み方がずれているので直す
 // TODO: NullPieceのclickをdisableにする
 // TODO: 桂馬などの自動で成る判定はtoPromoteで実装、移動では考慮しない
-// TODO: 盤面にマルポチを4箇所入れる
 </script>
 
 <style>
