@@ -16,7 +16,7 @@
                 <div class="hoge">
                     <div justify="center" v-for="(i, idx_row) in board" :key="idx_row" class="rowxx">
                         <div v-for="(j, idx_col) in i" :key="idx_col" class="colxx">
-                            <img class="piece" :src="hoge2(idx_col, idx_row)" @click="toMove(idx_col, idx_row)" alt="">
+                            <img class="piece" :src="hoge2(idx_col, idx_row)" @click="toMove(idx_col, idx_row)" alt="" :disabled="hoge5(idx_col, idx_row)">
                         </div>
                     </div>
                 </div>
@@ -62,12 +62,14 @@ abstract class Piece {
   public promoted: boolean;
   public img: string;
   public moveList: boolean[];
+  public disabled: boolean;
   constructor(file: File, rank: Rank, own: boolean) {
     this.position = new Position(file, rank);
     this.own = own;
     this.state = false;
     this.promoted = false;
     this.img = this.getImgString();
+    this.disabled = false;
   }
   meveTo(position: Position) {
     this.position = position;
@@ -186,6 +188,7 @@ class NullPiece extends Piece {
   name = "";
   promoted_name = "";
   state = true;
+  disabled = true;
   canMoveTo(position: Position) {
     return false;
   }
@@ -345,9 +348,15 @@ export default class Game extends Vue {
   hoge4(i) {
       return this.myHolding[i].img;
   }
+  hoge5(i, j) {
+      console.log("hoge", this.board[i][j].disabled)
+      this.board[i][j].disabled;
+  }
   toMove(i, j) {
-      console.log("tomove", i, j)
-      console.log(this.board[i][j].canPotentialMoveTo(this.board))
+      if(!this.board[i][j].disabled) {
+        console.log("tomove", i, j)
+        console.log(this.board[i][j].canPotentialMoveTo(this.board))
+      }
   }
   // xxメソッド
 }
@@ -361,6 +370,7 @@ export default class Game extends Vue {
 // TODO: 盤面の配列と将棋の読み方がずれているので直す
 // TODO: NullPieceのclickをdisableにする
 // TODO: 桂馬などの自動で成る判定はtoPromoteで実装、移動では考慮しない
+// TODO: 盤面にマルポチを4箇所入れる
 </script>
 
 <style>
