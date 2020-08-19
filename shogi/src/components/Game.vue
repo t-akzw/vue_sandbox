@@ -50,7 +50,7 @@ import { Component, Vue } from "vue-property-decorator";
 // 0は持ち駒状態
 type File = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9; // 筋 Col
 type Rank = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9; // 段 Row
-type Board = Piece[][];
+type Board = { key: { key: Piece } };
 
 class Position {
   // 駒の座標
@@ -72,7 +72,7 @@ abstract class Piece {
   abstract promoted_name: string;
   public promoted: boolean;
   public img: string;
-  public moveList: boolean[];
+  // public moveList: boolean[];
   public disabled: boolean;
   constructor(file: File, rank: Rank, own: boolean) {
     this.position = new Position(file, rank);
@@ -234,8 +234,45 @@ abstract class Captured {
 }
 */
 
-class ShogiGame {
-  public board = ShogiGame.makeBoard();
+@Component({ components: {} })
+export default class Game extends Vue {
+  public board = Game.makeBoard();
+  myHolding = [new Lance(0, 0, true), new Lance(0, 0, false)];
+  opHolding = [new Lance(0, 0, false), new Lance(0, 0, false)];
+  state = false;
+  init() {
+    // console.log(this.board[1][1]);
+    this.board[9][7].promoted = true;
+    console.log(this.board[9][7]);
+    // console.log(this.board[9][7].getImgString());
+    // 状態をDBにセットする必要がある
+  }
+  holding(i: number, j: number) {
+    console.log(i, j);
+    console.log("hogehoge", this.board[i][j].getImgString());
+    this.board[i][j].state = true;
+  }
+
+  hoge(i: number, j: number) {
+    console.log("hoge");
+    return this.board[i][j].state;
+  }
+
+  hoge2(i: number, j: number) {
+    return this.board[i][j].img;
+  }
+
+  hoge3(i: number) {
+    return this.opHolding[i].img;
+  }
+  hoge4(i: number) {
+    return this.myHolding[i].img;
+  }
+  toMove(i: number, j: number): void {
+    if (!this.board[i][j].disabled) {
+      this.board[i][j].canPotentialMoveTo(this.board);
+    }
+  }
   private static makeBoard() {
     // TODO: 駒のfile, rankは手動で設定せずに自動で入れたい
     return {
@@ -339,49 +376,6 @@ class ShogiGame {
         9: new Lance(9, 9, true)
       }
     };
-  }
-}
-
-@Component({ components: {} })
-export default class Game extends Vue {
-  board = {};
-  myHolding = [new Lance(0, 0, true), new Lance(0, 0, false)];
-  opHolding = [new Lance(0, 0, false), new Lance(0, 0, false)];
-  state = false;
-  init() {
-    const obj = new ShogiGame();
-    this.board = obj.board;
-    console.log(this.board[1][1]);
-    this.board[9][7].promoted = true;
-    console.log(this.board[9][7]);
-    console.log(this.board[9][7].getImgString());
-    // 状態をDBにセットする必要がある
-  }
-  holding(i, j) {
-    console.log(i, j);
-    console.log("hogehoge", this.board[i][j].getImgString());
-    this.board[i][j].state = true;
-  }
-
-  hoge(i, j) {
-    console.log("hoge");
-    return this.board[i][j].state;
-  }
-
-  hoge2(i, j) {
-    return this.board[i][j].img;
-  }
-
-  hoge3(i) {
-    return this.opHolding[i].img;
-  }
-  hoge4(i) {
-    return this.myHolding[i].img;
-  }
-  toMove(i: number, j: number): void {
-    if (!this.board[i][j].disabled) {
-      this.board[i][j].canPotentialMoveTo(this.board);
-    }
   }
   // xxメソッド
 }
