@@ -1,36 +1,46 @@
 <template>
-    <div class="Top">
-        <div class="Game">Game {{ $route.params.id }}</div>
-        <v-btn rounded color="primary" dark @click="init">Rounded Button</v-btn>
-                <div class="opholding" >
-                    <div class="sub_opholding">
-                        <img class="piece" :src="hoge3(0)" alt="">
-                    </div>
-                    <div class="sub_opholding">
-                        <img class="piece" :src="hoge3(0)" alt="">
-                    </div>
-                </div>
-
-        <div class="ban">
-            <div class="container">
-                <div class="hoge">
-                    <div justify="center" v-for="(i, idx_row) in board" :key="idx_row" class="rowxx">
-                        <div v-for="(j, idx_col) in i" :key="idx_col" class="colxx">
-                            <img class="piece" :src="hoge2(idx_col, idx_row)" @click="toMove(idx_col, idx_row)" alt="" :disabled="hoge5(idx_col, idx_row)">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-                <div class="myholding" >
-                    <div class="sub_myholding">
-                        <img class="piece" :src="hoge4(0)" alt="">
-                    </div>
-                    <div class="sub_myholding">
-                        <img class="piece" :src="hoge4(0)" alt="">
-                    </div>
-                </div>
+  <div class="Top">
+    <div class="Game">Game {{ $route.params.id }}</div>
+    <v-btn color="primary" @click="init">Rounded Button</v-btn>
+    <div class="opholding">
+      <div class="sub_opholding">
+        <img class="piece" :src="hoge3(0)" alt="">
+      </div>
+      <div class="sub_opholding">
+        <img class="piece" :src="hoge3(0)" alt="">
+      </div>
     </div>
+
+    <div class="ban">
+      <div class="container">
+        <div class="hoge">
+          <div
+            justify="center" 
+            v-for="(i, idx_row) in board"
+            :key="idx_row"
+            class="rowxx"
+          >
+            <div v-for="(j, idx_col) in i" :key="idx_col" class="colxx">
+              <img
+                class="piece"
+                :src="hoge2(idx_col, idx_row)"
+                @click="toMove(idx_col, idx_row)"
+                alt=""
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="myholding">
+      <div class="sub_myholding">
+        <img class="piece" :src="hoge4(0)" alt="">
+      </div>
+      <div class="sub_myholding">
+        <img class="piece" :src="hoge4(0)" alt="">
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -74,15 +84,17 @@ abstract class Piece {
   meveTo(position: Position) {
     this.position = position;
   }
-  canPotentialMoveTo(board: any) {
-    console.log("hogehoge")
+  allMovablePlace(board: any): any[] {
+    console.log("hogehoge");
+    const arrI: any[] = new Array(9);
     for (let i = 1; i < 10; i++) {
-        for (let j = 1; j < 10; j++) {
-            console.log(i,j, board[i][j].name)
-            console.log(this.canMoveTo(board[i][j].position))
-        }
+      const arrJ: any[] = new Array(9);
+      for (let j = 1; j < 10; j++) {
+        arrJ[j] = this.canMoveTo(board[i][j].position);
+      }
+      arrI[i] = arrJ;
     }
-    return true
+    return arrI
   }
   abstract canMoveTo(position: Position): boolean;
   defaultCanMoveTo(position: Position): boolean {
@@ -103,7 +115,8 @@ class GoldGeneral extends Piece {
   name = "金将";
   promoted_name = "金将";
   canMoveTo(position: Position) {
-    return this.defaultCanMoveTo(position)
+    this.allMovablePlace(position)
+    return false
   }
 }
 
@@ -190,6 +203,7 @@ class NullPiece extends Piece {
   state = true;
   disabled = true;
   canMoveTo(position: Position) {
+    console.log(position);
     return false;
   }
 }
@@ -215,7 +229,7 @@ class ShogiGame {
         6: new GoldGeneral(6, 1, false),
         7: new SilverGeneral(7, 1, false),
         8: new Knight(8, 1, false),
-        9: new Lance(9, 1, false),
+        9: new Lance(9, 1, false)
       },
       2: {
         1: new NullPiece(1, 2, false),
@@ -226,7 +240,7 @@ class ShogiGame {
         6: new NullPiece(6, 2, false),
         7: new NullPiece(7, 2, false),
         8: new Bishop(8, 2, false),
-        9: new NullPiece(9, 2, false),
+        9: new NullPiece(9, 2, false)
       },
       3: {
         1: new Pawn(1, 3, false),
@@ -237,7 +251,7 @@ class ShogiGame {
         6: new Pawn(6, 3, false),
         7: new Pawn(7, 3, false),
         8: new Pawn(8, 3, false),
-        9: new Pawn(9, 3, false),
+        9: new Pawn(9, 3, false)
       },
       4: {
         1: new NullPiece(1, 4, false),
@@ -248,7 +262,7 @@ class ShogiGame {
         6: new NullPiece(6, 4, false),
         7: new NullPiece(7, 4, false),
         8: new NullPiece(8, 4, false),
-        9: new NullPiece(9, 4, false),
+        9: new NullPiece(9, 4, false)
       },
       5: {
         1: new NullPiece(1, 5, false),
@@ -259,7 +273,7 @@ class ShogiGame {
         6: new NullPiece(6, 5, false),
         7: new NullPiece(7, 5, false),
         8: new NullPiece(8, 5, false),
-        9: new NullPiece(9, 5, false),
+        9: new NullPiece(9, 5, false)
       },
       6: {
         1: new NullPiece(1, 6, false),
@@ -270,7 +284,7 @@ class ShogiGame {
         6: new NullPiece(6, 6, false),
         7: new NullPiece(7, 6, false),
         8: new NullPiece(8, 6, false),
-        9: new NullPiece(9, 6, false),
+        9: new NullPiece(9, 6, false)
       },
       7: {
         1: new Pawn(1, 7, true),
@@ -281,7 +295,7 @@ class ShogiGame {
         6: new Pawn(6, 7, true),
         7: new Pawn(7, 7, true),
         8: new Pawn(8, 7, true),
-        9: new Pawn(9, 7, true),
+        9: new Pawn(9, 7, true)
       },
       8: {
         1: new NullPiece(1, 8, true),
@@ -292,7 +306,7 @@ class ShogiGame {
         6: new NullPiece(6, 8, true),
         7: new NullPiece(7, 8, true),
         8: new Rook(8, 8, true),
-        9: new NullPiece(9, 8, false),
+        9: new NullPiece(9, 8, false)
       },
       9: {
         1: new Lance(1, 9, true),
@@ -303,33 +317,30 @@ class ShogiGame {
         6: new GoldGeneral(6, 9, true),
         7: new SilverGeneral(7, 9, true),
         8: new Knight(8, 9, true),
-        9: new Lance(9, 9, true),
-      },
+        9: new Lance(9, 9, true)
+      }
     };
   }
 }
 
-@Component({
-  components: {
-  }
-})
+@Component({components: {}})
 export default class Game extends Vue {
   board = {};
   myHolding = [ (new Lance(0, 0, true)), new Lance(0, 0, false) ];
-  opHolding = [ (new Lance(0, 0, false)), new Lance(0, 0, false)];
+  opHolding = [new Lance(0, 0, false), new Lance(0, 0, false)];
   state = false;
   init() {
     const obj = new ShogiGame();
     this.board = obj.board;
-    console.log(this.board[1][1])
-    this.board[9][7].promoted = true
-    console.log(this.board[9][7])
-    console.log(this.board[9][7].getImgString())
+    console.log(this.board[1][1]);
+    this.board[9][7].promoted = true;
+    console.log(this.board[9][7]);
+    console.log(this.board[9][7].getImgString());
     // 状態をDBにセットする必要がある
   }
   holding(i, j) {
     console.log(i, j);
-    console.log("hogehoge", this.board[i][j].getImgString())
+    console.log("hogehoge", this.board[i][j].getImgString());
     this.board[i][j].state = true;
   }
 
@@ -343,20 +354,15 @@ export default class Game extends Vue {
   }
 
   hoge3(i) {
-      return this.opHolding[i].img;
+    return this.opHolding[i].img;
   }
   hoge4(i) {
-      return this.myHolding[i].img;
+    return this.myHolding[i].img;
   }
-  hoge5(i, j) {
-      console.log("hoge", this.board[i][j].disabled)
-      this.board[i][j].disabled;
-  }
-  toMove(i, j) {
-      if(!this.board[i][j].disabled) {
-        console.log("tomove", i, j)
-        console.log(this.board[i][j].canPotentialMoveTo(this.board))
-      }
+  toMove(i: number, j: number): void {
+    if (!this.board[i][j].disabled) {
+      this.board[i][j].canPotentialMoveTo(this.board);
+    }
   }
   // xxメソッド
 }
@@ -368,7 +374,6 @@ export default class Game extends Vue {
 // TODO: 駒のnameの持ち方
 // TODO: boardの型
 // TODO: 盤面の配列と将棋の読み方がずれているので直す
-// TODO: NullPieceのclickをdisableにする
 // TODO: 桂馬などの自動で成る判定はtoPromoteで実装、移動では考慮しない
 // TODO: 盤面にマルポチを4箇所入れる
 </script>
@@ -379,82 +384,81 @@ img.piece {
   height: 70%;
 }
 .hoge {
-    position: absolute;
-    display: grid; /* グリッドレイアウト */
-    grid-template-columns: repeat(9, 1fr);
-            top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-    width: 100%;
-    overflow: hidden;
+  position: absolute;
+  display: grid; /* グリッドレイアウト */
+  grid-template-columns: repeat(9, 1fr);
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  overflow: hidden;
 }
 .hoge:before {
-    padding-top: 100%;
+  padding-top: 100%;
 }
 div.Top {
-    width: 70%;
-    position: relative;
-
+  width: 70%;
+  position: relative;
 }
 .container {
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    background-color: #FDF8ED;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #fdf8ed;
 }
 
 .container:before {
-    content: "";
-    display: block;
-    padding-top: 100%;
-    border: 1px solid #565451;
+  content: "";
+  display: block;
+  padding-top: 100%;
+  border: 1px solid #565451;
 }
 div.container {
-    padding-top: 0;
-    padding-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .colxx {
-    border-top: 1px solid #565451;
-    border-left: 1px solid #565451;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-    vertical-align: middle;
-    display: -webkit-flex;
+  border-top: 1px solid #565451;
+  border-left: 1px solid #565451;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  vertical-align: middle;
+  display: -webkit-flex;
 }
 .rowxx {
-    width: 100%;
-    height: calc(100%/9);
-                top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
+  width: 100%;
+  height: calc(100% / 9);
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 .User {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }
 div.ban {
-    padding: 1rem;
-    background-color: #FDF8ED;
+  padding: 1rem;
+  background-color: #fdf8ed;
 }
 div.opholding {
-    padding: 1rem;
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    background-color: #dbb25a;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  background-color: #dbb25a;
 }
 div.myholding {
-    padding: 1rem;
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    background-color: #dbb25a;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  background-color: #dbb25a;
 }
 </style>
