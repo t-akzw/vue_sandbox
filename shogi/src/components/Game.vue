@@ -111,13 +111,11 @@ abstract class Piece {
   }
   getImgString(): string {
     const promotedIdx = this.promoted ? "x" : "";
-    const ownIdx = this.own ? "My" : "Op";
     return (
-      "/img/koma/default/" +
+      "/img/koma/v1/" +
       promotedIdx +
-      ownIdx +
       this.constructor.name +
-      ".svg"
+      "Normal.svg"
     );
   }
 }
@@ -269,8 +267,9 @@ export default class Game extends Vue {
     return this.myHolding[i].img;
   }
   toMove(i: number, j: number): void {
+    console.log("hoge", this.board[i][j])
     if (!this.board[i][j].disabled) {
-      this.board[i][j].canPotentialMoveTo(this.board);
+      this.board[i][j].canMoveTo(this.board);
     }
   }
   private static makeBoard() {
@@ -393,8 +392,8 @@ export default class Game extends Vue {
 
 <style>
 img.piece {
-  width: 70%;
-  height: 70%;
+  width: 96%;
+  height: 96%;
 }
 .hoge {
   position: absolute;
@@ -460,7 +459,7 @@ div.container {
 }
 div.ban {
   padding: 1rem;
-  background-color: #fdf8ed;
+  background-color: #FDF1DB;
 }
 div.opholding {
   padding: 1rem;
