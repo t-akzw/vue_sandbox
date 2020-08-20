@@ -10,7 +10,5 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class User extends Vue {
-
-}
+export default class User extends Vue {}
 </script>
