@@ -72,6 +72,7 @@ abstract class Piece {
   abstract promoted_name: string;
   public promoted: boolean;
   public img: string;
+  public clicked: boolean;
   // public moveList: boolean[];
   public disabled: boolean;
   constructor(file: File, rank: Rank, own: boolean) {
@@ -81,6 +82,8 @@ abstract class Piece {
     this.promoted = false;
     this.img = this.getImgString();
     this.disabled = false;
+    this.clicked = false;
+    console.log("ww", this.clicked)
   }
   meveTo(position: Position) {
     this.position = position;
@@ -111,11 +114,16 @@ abstract class Piece {
   }
   getImgString(): string {
     const promotedIdx = this.promoted ? "x" : "";
+    let imgState = "Normal";
+    if (this.clicked === undefined) {
+      imgState = this.clicked ? "Clicked" : "Normal";
+    }
     return (
       "/img/koma/v1/" +
       promotedIdx +
       this.constructor.name +
-      "Normal.svg"
+      imgState +
+      ".svg"
     );
   }
 }
@@ -123,6 +131,7 @@ abstract class Piece {
 class GoldGeneral extends Piece {
   name = "金将";
   promoted_name = "金将";
+  clicked = false;
   canMoveTo(position: Position) {
     this.defaultCanMoveTo(position);
     return false;
@@ -132,6 +141,7 @@ class GoldGeneral extends Piece {
 class King extends Piece {
   name = "王将";
   promoted_name = "王将";
+  clicked = false;
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
     return (
@@ -145,6 +155,7 @@ class King extends Piece {
 class Rook extends Piece {
   name = "飛車";
   promoted_name = "竜王";
+  clicked = false;
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
     return (
@@ -158,6 +169,7 @@ class Rook extends Piece {
 class Bishop extends Piece {
   name = "角行";
   promoted_name = "竜馬";
+  clicked = false;
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
     return (
@@ -171,6 +183,7 @@ class Bishop extends Piece {
 class SilverGeneral extends Piece {
   name = "銀将";
   promoted_name = "成銀";
+  clicked = false;
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
     const val = this.own ? -1 : 1;
@@ -181,9 +194,11 @@ class SilverGeneral extends Piece {
             (distance.file == -1 || distance.file == 1));
   }
 }
+
 class Knight extends Piece {
   name = "桂馬";
   promoted_name = "成桂";
+  clicked = false;
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
     const val = this.own ? -2 : 2;
@@ -197,15 +212,18 @@ class Knight extends Piece {
 class Lance extends Piece {
   name = "香車";
   promoted_name = "成香";
+  clicked = false;
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
     const val = this.own ? distance.rank < 0 : distance.rank > 0;
     return val && distance.file == 0;
   }
 }
+
 class Pawn extends Piece {
   name = "歩兵";
   promoted_name = "と金";
+  clicked = false;
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
     const val = this.own ? -1 : 1;
@@ -218,6 +236,7 @@ class NullPiece extends Piece {
   promoted_name = "";
   state = true;
   disabled = true;
+  clicked = false;
   canMoveTo(position: Position) {
     console.log(position);
     return false;
@@ -268,6 +287,7 @@ export default class Game extends Vue {
   }
   toMove(i: number, j: number): void {
     console.log("hoge", this.board[i][j])
+    this.board[i][j].clicked = true;
     if (!this.board[i][j].disabled) {
       this.board[i][j].canMoveTo(this.board);
     }
