@@ -80,10 +80,9 @@ abstract class Piece {
     this.own = own;
     this.state = false;
     this.promoted = false;
-    this.img = this.getImgString();
+    this.setImgString();
     this.disabled = false;
     this.clicked = false;
-    console.log("ww", this.clicked)
   }
   meveTo(position: Position) {
     this.position = position;
@@ -112,19 +111,22 @@ abstract class Piece {
       (distance.rank == -val && distance.file == 0)
     );
   }
-  getImgString(): string {
+  setImgString(): void {
+    console.log("setset", this.clicked)
     const promotedIdx = this.promoted ? "x" : "";
     let imgState = "Normal";
-    if (this.clicked === undefined) {
+    if (this.clicked !== undefined) {
       imgState = this.clicked ? "Clicked" : "Normal";
     }
-    return (
+    console.log("xx", promotedIdx, imgState)
+    this.img = (
       "/img/koma/v1/" +
       promotedIdx +
       this.constructor.name +
       imgState +
       ".svg"
     );
+    console.log("hogehogehoge", this.img)
   }
 }
 
@@ -287,7 +289,9 @@ export default class Game extends Vue {
   }
   toMove(i: number, j: number): void {
     console.log("hoge", this.board[i][j])
-    this.board[i][j].clicked = true;
+    this.board[i][j].clicked = !this.board[i][j].clicked;
+    this.board[i][j].setImgString();
+    console.log("hoge2", this.board[i][j])
     if (!this.board[i][j].disabled) {
       this.board[i][j].canMoveTo(this.board);
     }
