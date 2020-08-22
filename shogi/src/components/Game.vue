@@ -259,6 +259,7 @@ export default class Game extends Vue {
   myHolding = [new Lance(0, 0, true), new Lance(0, 0, false)];
   opHolding = [new Lance(0, 0, false), new Lance(0, 0, false)];
   state = false;
+  clickedNow: Piece;
   init() {
     // console.log(this.board[1][1]);
     this.board[9][7].promoted = true;
@@ -288,6 +289,12 @@ export default class Game extends Vue {
     return this.myHolding[i].img;
   }
   toMove(i: number, j: number): void {
+    if (this.clickedNow !== undefined) {
+      this.clickedNow.clicked = false; // これまで押されていた場所をunclickする
+      this.clickedNow.setImgString(); // これまで押されていた場所をunclickする
+    }
+    this.clickedNow = this.board[i][j];
+    console.log("clickednow", this.clickedNow)
     console.log("hoge", this.board[i][j])
     this.board[i][j].clicked = !this.board[i][j].clicked;
     this.board[i][j].setImgString();
@@ -405,16 +412,14 @@ export default class Game extends Vue {
   }
   // xxメソッド
 }
-// TODO1: ボタンから将棋の駒に変更する、div要素で@clickによってcssを変更する
-// TODO: リサイズしても盤面の9x9が崩れないようにする
 // TODO: DBに持つべきものは、盤面、駒の動き、持ち駒のリスト
 // TODO: 持ち駒フィールドの用意
 // TODO: 手番の実装
 // TODO: 駒のnameの持ち方
-// TODO: boardの型
 // TODO: 盤面の配列と将棋の読み方がずれているので直す
 // TODO: 桂馬などの自動で成る判定はtoPromoteで実装、移動では考慮しない
 // TODO: 盤面にマルポチを4箇所入れる
+// TODO: クリックを自分の駒以外disableにする
 </script>
 
 <style>
