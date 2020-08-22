@@ -22,7 +22,7 @@
           >
             <div v-for="(j, idx_col) in i" :key="idx_col" class="colxx">
               <img
-                class="piece"
+                :class="pieceStyle(idx_col, idx_row)"
                 :src="hoge2(idx_col, idx_row)"
                 @click="toMove(idx_col, idx_row)"
                 alt=""
@@ -296,6 +296,9 @@ export default class Game extends Vue {
       this.board[i][j].canMoveTo(this.board);
     }
   }
+  pieceStyle(i: number, j: number) {
+    return this.board[i][j].own? 'piece-own' : 'piece-ops'
+  }
   private static makeBoard() {
     // TODO: 駒のfile, rankは手動で設定せずに自動で入れたい
     return {
@@ -415,6 +418,15 @@ export default class Game extends Vue {
 </script>
 
 <style>
+img.piece-own {
+  width: 96%;
+  height: 96%;
+}
+img.piece-ops {
+  width: 96%;
+  height: 96%;
+  transform: rotate( -180deg );
+}
 img.piece {
   width: 96%;
   height: 96%;
