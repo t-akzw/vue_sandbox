@@ -24,7 +24,7 @@
               <img
                 :class="pieceStyle(idx_col, idx_row)"
                 :src="hoge2(idx_col, idx_row)"
-                @click="toMove(idx_col, idx_row)"
+                @click="clickedBanPiece(idx_col, idx_row)"
                 alt=""
               />
             </div>
@@ -55,6 +55,12 @@ type Board = { key: { key: Piece } };
 class Position {
   // 駒の座標
   constructor(private file: File, private rank: Rank) {}
+  getFile() {
+    return this.file
+  }
+  getRank() {
+    return this.rank
+  }
   distanceFrom(position: Position) {
     return {
       rank: position.rank - this.rank,
@@ -73,6 +79,7 @@ abstract class Piece {
   public promoted: boolean;
   public img: string;
   public clicked: boolean;
+  public selected: boolean;
   // public moveList: boolean[];
   public disabled: boolean;
   constructor(file: File, rank: Rank, own: boolean) {
@@ -83,16 +90,18 @@ abstract class Piece {
     this.setImgString();
     this.disabled = false;
     this.clicked = false;
+    this.selected = false;
   }
   meveTo(position: Position) {
     this.position = position;
   }
   allMovablePlace(board: Board): boolean[][] {
-    console.log("hogehoge");
     const arrI: boolean[][] = new Array(9);
     for (let i = 1; i < 10; i++) {
       const arrJ: boolean[] = new Array(9);
       for (let j = 1; j < 10; j++) {
+        board[i][j].selected = this.canMoveTo(board[i][j].position);
+        board[i][j].setImgString();
         arrJ[j] = this.canMoveTo(board[i][j].position);
       }
       arrI[i] = arrJ;
@@ -112,13 +121,14 @@ abstract class Piece {
     );
   }
   setImgString(): void {
-    console.log("setset", this.clicked)
     const promotedIdx = this.promoted ? "x" : "";
     let imgState = "Normal";
     if (this.clicked !== undefined) {
       imgState = this.clicked ? "Clicked" : "Normal";
     }
-    console.log("xx", promotedIdx, imgState)
+    if (this.selected !== undefined && this.clicked !== true) { // Clickされている時はSelectedは無効
+      imgState = this.selected ? "Selected" : "Normal";
+    }
     this.img = (
       "/img/koma/v1/" +
       promotedIdx +
@@ -126,7 +136,6 @@ abstract class Piece {
       imgState +
       ".svg"
     );
-    console.log("hogehogehoge", this.img)
   }
 }
 
@@ -135,8 +144,7 @@ class GoldGeneral extends Piece {
   promoted_name = "金将";
   clicked = false;
   canMoveTo(position: Position) {
-    this.defaultCanMoveTo(position);
-    return false;
+    return this.defaultCanMoveTo(position);
   }
 }
 
@@ -160,11 +168,10 @@ class Rook extends Piece {
   clicked = false;
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return (
-      (!(distance.file == 0 && distance.rank == 0) &&
-        (distance.file == 0 || distance.rank == 0)) ||
-      (Math.abs(distance.file) < 2 && Math.abs(distance.rank) < 2)
-    );
+    const ownPosition = !(distance.file == 0 && distance.rank == 0);
+    const defaultMovable = ownPosition && ( distance.file == 0 || distance.rank == 0 );
+    const promotedMovable = ownPosition && ( ( distance.file == 0 || distance.rank == 0 ) || (Math.abs(distance.file) < 2 && Math.abs(distance.rank) < 2));
+    return this.promoted ? promotedMovable : defaultMovable;
   }
 }
 
@@ -174,11 +181,10 @@ class Bishop extends Piece {
   clicked = false;
   canMoveTo(position: Position) {
     const distance = this.position.distanceFrom(position);
-    return (
-      (!(distance.file == 0 && distance.rank == 0) &&
-        Math.abs(distance.file) == Math.abs(distance.rank)) ||
-      (Math.abs(distance.file) < 2 && Math.abs(distance.rank) < 2)
-    );
+    const ownPosition = !(distance.file == 0 && distance.rank == 0);
+    const defaultMovable = ownPosition && ( Math.abs(distance.file) == Math.abs(distance.rank) );
+    const promotedMovable = ownPosition && ( Math.abs(distance.file) == Math.abs(distance.rank) || (Math.abs(distance.file) < 2 && Math.abs(distance.rank) < 2));
+    return this.promoted ? promotedMovable : defaultMovable;
   }
 }
 
@@ -288,19 +294,36 @@ export default class Game extends Vue {
   hoge4(i: number) {
     return this.myHolding[i].img;
   }
-  toMove(i: number, j: number): void {
+  unselect(): void {
+    console.log("unselect")
+    for (let i = 1; i < 10; i++) {
+      for (let j = 1; j < 10; j++) {
+        //console.log("xx", i, j, this.board[i][j].selected, this.board[i][j].img)
+        this.board[i][j].selected = false;
+        this.board[i][j].setImgString();
+        //console.log("xx", i, j, this.board[i][j].selected, this.board[i][j].img)
+      }
+    }
+  }
+  clickedBanPiece(i: number, j: number): void {
+    console.log("clickBanPiece")
+    this.unselect();
     if (this.clickedNow !== undefined) {
-      this.clickedNow.clicked = false; // これまで押されていた場所をunclickする
-      this.clickedNow.setImgString(); // これまで押されていた場所をunclickする
+      const distance = this.clickedNow.position.distanceFrom(this.board[i][j].position)
+      //console.log("dist", distance)
+      if (distance.file !== 0 || distance.rank !== 0) {
+        this.clickedNow.clicked = false; // これまで押されていた場所をunclickする
+        this.clickedNow.setImgString(); // これまで押されていた場所をunclickする
+      }
     }
     this.clickedNow = this.board[i][j];
-    console.log("clickednow", this.clickedNow)
-    console.log("hoge", this.board[i][j])
     this.board[i][j].clicked = !this.board[i][j].clicked;
     this.board[i][j].setImgString();
-    console.log("hoge2", this.board[i][j])
     if (!this.board[i][j].disabled) {
       this.board[i][j].canMoveTo(this.board);
+    }
+    if (this.board[i][j].clicked) { // clickedがtrueの時のみ移動範囲を表示したいため
+      this.board[i][j].allMovablePlace(this.board)
     }
   }
   pieceStyle(i: number, j: number) {
