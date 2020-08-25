@@ -4,7 +4,6 @@ import { File, Rank, Position } from "@/domains/position";
 export abstract class Piece {
   public position: Position;
   protected own: boolean;
-  public state: boolean;
   public promoted: boolean;
   public img: string;
   public clicked: boolean;
@@ -13,7 +12,6 @@ export abstract class Piece {
   constructor(file: File, rank: Rank, own: boolean) {
     this.position = new Position(file, rank);
     this.own = own;
-    this.state = false;
     this.promoted = false;
     this.setImgString();
     this.disabled = false;
@@ -189,7 +187,6 @@ export class Pawn extends Piece {
 export class NullPiece extends Piece {
     name = "";
     promoted_name = "";
-    state = true;
     disabled = true;
     clicked = false;
     canMoveTo(position: Position) {
