@@ -30,7 +30,7 @@ export type BoardDomain = { key: { key: Piece } };
 */
 
 export class Board {
-    private static makeBoard() {
+    public makeBoard() {
         // TODO: 駒のfile, rankは手動で設定せずに自動で入れたい
         return {
             1: {
