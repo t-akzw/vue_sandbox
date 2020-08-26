@@ -10,8 +10,9 @@ import {
     Bishop,
     NullPiece
 } from "@/domains/piece";
+import { File, Rank, Position } from "@/domains/position"
 
-export type BoardDomain = { key: { key: Piece } };
+export type BoardDomain = { number: { number: Piece } };
 
 /*
   allMovablePlace(board: Board): boolean[][] {
@@ -30,7 +31,15 @@ export type BoardDomain = { key: { key: Piece } };
 */
 
 export class Board {
-    public makeBoard() {
+    Board: Array<Piece>[] = new Array(9);
+    private setPiece(rank: Rank, file: File): void {
+        
+    }
+    public makeBoard(): void {
+        console.log("hoge", this.Board)
+
+
+        /*
         // TODO: 駒のfile, rankは手動で設定せずに自動で入れたい
         return {
             1: {
@@ -132,7 +141,7 @@ export class Board {
             8: new Knight(8, 9, true),
             9: new Lance(9, 9, true)
           }
-        };
+        }; */
     }
 
 }
