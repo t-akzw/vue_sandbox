@@ -59,9 +59,9 @@ export default class Game extends Vue {
     super();
     this.myHolding = this.hold.myHolding()
     this.opHolding = this.hold.opHolding()
-    this.Board = this.board.makeBoard()
+    this.board.makeBoard()
   }
-  clickedNow: Piece;
+  // clickedNow: Piece;
   holding(i: number, j: number) {
     console.log(i, j);
     console.log("hogehoge", this.board[i][j].getImgString());
@@ -89,6 +89,10 @@ export default class Game extends Vue {
     }
   }
   clickedBanPiece(i: number, j: number): void {
+    console.log("")
+  }
+  /*
+  clickedBanPiece(i: number, j: number): void {
     console.log("clickBanPiece")
     this.unselect();
     if (this.clickedNow !== undefined) {
@@ -110,6 +114,7 @@ export default class Game extends Vue {
       this.board[i][j].movablePlace(this.board)
     }
   }
+  */
   pieceStyle(i: number, j: number) {
     return this.board[i][j].own? 'piece-own' : 'piece-ops'
   }
