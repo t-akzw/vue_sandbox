@@ -15,7 +15,7 @@
         <div class="hoge">
           <div
             justify="center"
-            v-for="(i, idx_row) in board"
+            v-for="(i, idx_row) in board.Board"
             :key="idx_row"
             class="rowxx"
           >
@@ -54,13 +54,12 @@ export default class Game extends Vue {
   board = new Board()
   myHolding = []
   opHolding = []
-  Board = []
   constructor() {
     super();
     this.myHolding = this.hold.myHolding()
     this.opHolding = this.hold.opHolding()
-    this.board.makeBoard()
   }
+
   // clickedNow: Piece;
   holding(i: number, j: number) {
     console.log(i, j);
@@ -116,7 +115,9 @@ export default class Game extends Vue {
   }
   */
   pieceStyle(i: number, j: number) {
-    return this.board[i][j].own? 'piece-own' : 'piece-ops'
+    console.log("xxxx", i, j)
+    console.log("this.board", this.board.Board, this.board.Board)
+    return this.board.Board[i][j].own? 'piece-own' : 'piece-ops'
   }
 }
 // TODO: DBに持つべきものは、盤面、駒の動き、持ち駒のリスト
