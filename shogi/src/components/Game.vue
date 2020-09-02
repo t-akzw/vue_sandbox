@@ -63,11 +63,12 @@ export default class Game extends Vue {
   // clickedNow: Piece;
   holding(i: number, j: number) {
     console.log(i, j);
-    console.log("hogehoge", this.board[i][j].getImgString());
+    console.log("hogehoge", this.board.Board[i][j].getImgString());
   }
 
   hoge2(i: number, j: number) {
-    return this.board[i][j].img;
+    console.log("hoge2", this.board.Board[i][j])
+    return this.board.Board[i][j].img;
   }
 
   hoge3(i: number) {
@@ -78,11 +79,11 @@ export default class Game extends Vue {
   }
   unselect(): void {
     console.log("unselect")
-    for (let i = 1; i < 10; i++) {
-      for (let j = 1; j < 10; j++) {
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
         //console.log("xx", i, j, this.board[i][j].selected, this.board[i][j].img)
-        this.board[i][j].selected = false;
-        this.board[i][j].setImgString();
+        this.board.Board[i][j].selected = false;
+        this.board.Board[i][j].setImgString();
         //console.log("xx", i, j, this.board[i][j].selected, this.board[i][j].img)
       }
     }
@@ -115,8 +116,6 @@ export default class Game extends Vue {
   }
   */
   pieceStyle(i: number, j: number) {
-    console.log("xxxx", i, j)
-    console.log("this.board", this.board.Board, this.board.Board)
     return this.board.Board[i][j].own? 'piece-own' : 'piece-ops'
   }
 }
