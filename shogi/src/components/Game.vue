@@ -54,13 +54,13 @@ export default class Game extends Vue {
   board = new Board()
   myHolding = []
   opHolding = []
+  clickedNow = undefined
   constructor() {
     super();
     this.myHolding = this.hold.myHolding()
     this.opHolding = this.hold.opHolding()
   }
 
-  // clickedNow: Piece;
   holding(i: number, j: number) {
     console.log(i, j);
     console.log("hogehoge", this.board.Board[i][j].getImgString());
@@ -89,32 +89,27 @@ export default class Game extends Vue {
     }
   }
   clickedBanPiece(i: number, j: number): void {
-    console.log("")
-  }
-  /*
-  clickedBanPiece(i: number, j: number): void {
     console.log("clickBanPiece")
     this.unselect();
     if (this.clickedNow !== undefined) {
-      const distance = this.clickedNow.position.distanceFrom(this.board[i][j].position)
+      const distance = this.clickedNow.position.distanceFrom(this.board.Board[i][j].position)
       //console.log("dist", distance)
       if (distance.file !== 0 || distance.rank !== 0) {
         this.clickedNow.clicked = false; // これまで押されていた場所をunclickする
         this.clickedNow.setImgString(); // これまで押されていた場所をunclickする
       }
     }
-    this.clickedNow = this.board[i][j];
-    this.board[i][j].clicked = !this.board[i][j].clicked;
-    this.board[i][j].setImgString();
-    if (!this.board[i][j].disabled) {
-      this.board[i][j].canMoveTo(this.board);
+    this.clickedNow = this.board.Board[i][j];
+    this.board.Board[i][j].clicked = !this.board.Board[i][j].clicked;
+    this.board.Board[i][j].setImgString();
+    if (!this.board.Board[i][j].disabled) {
+      this.board.Board[i][j].canMoveTo(this.board);
     }
-    if (this.board[i][j].clicked) { // clickedがtrueの時のみ移動範囲を表示したいため
+    if (this.board.Board[i][j].clicked) { // clickedがtrueの時のみ移動範囲を表示したいため
       // this.board[i][j].allMovablePlace(this.board)
-      this.board[i][j].movablePlace(this.board)
+      this.board.Board[i][j].movablePlace(this.board.Board)
     }
   }
-  */
   pieceStyle(i: number, j: number) {
     return this.board.Board[i][j].own? 'piece-own' : 'piece-ops'
   }
