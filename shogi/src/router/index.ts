@@ -32,11 +32,11 @@ export default new Router({
       component: User,
       children: [
         {
-          path: 'profile',
+          path: "profile",
           component: UserProfile
         },
         {
-          path: 'game',
+          path: "game",
           component: Game
         }
       ]
