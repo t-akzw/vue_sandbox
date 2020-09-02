@@ -5,7 +5,7 @@ export abstract class Piece {
   public position: Position;
   protected own: boolean;
   public promoted: boolean;
-  public img: string;
+  public img!: string;
   public clicked: boolean;
   public selected: boolean;
   public disabled: boolean;
@@ -17,7 +17,6 @@ export abstract class Piece {
     this.disabled = false;
     this.clicked = false;
     this.selected = false;
-    this.img = "";
   }
   moveTo(position: Position) {
     this.position = position;
