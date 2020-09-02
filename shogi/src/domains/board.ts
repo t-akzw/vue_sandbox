@@ -32,6 +32,7 @@ export type BoardDomain = Piece[][];
 
 export class Board {
     Board: BoardDomain = new Array(9);
+    clickedNow!: Piece;
     constructor() {
         this.makeBoard()
     }
@@ -84,6 +85,39 @@ export class Board {
             new Lance(1, 9, true), new Knight(2, 9, true), new SilverGeneral(3, 9, true),
             new GoldGeneral(4, 9, true), new King(5, 9, true), new GoldGeneral(6, 9, true),
             new SilverGeneral(7, 9, true), new Knight(8, 9, true), new Lance(9, 9, true) ]
+    }
+
+    unselect(): void {
+      console.log("unselect")
+      for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+          this.Board[i][j].selected = false;
+          this.Board[i][j].setImgString();
+        }
+      }
+    }
+
+    clickedBanPiece(i: number, j: number): void {
+      console.log("clickBanPiece")
+      this.unselect();
+      if (this.clickedNow !== undefined) {
+        const distance = this.clickedNow.position.distanceFrom(this.Board[i][j].position)
+        //console.log("dist", distance)
+        if (distance.file !== 0 || distance.rank !== 0) {
+          this.clickedNow.clicked = false; // これまで押されていた場所をunclickする
+          this.clickedNow.setImgString(); // これまで押されていた場所をunclickする
+        }
+      }
+      this.clickedNow = this.Board[i][j];
+      this.Board[i][j].clicked = !this.Board[i][j].clicked;
+      this.Board[i][j].setImgString();
+      if (!this.Board[i][j].disabled) {
+        //this.Board[i][j].canMoveTo(this.Board);
+      }
+      if (this.Board[i][j].clicked) { // clickedがtrueの時のみ移動範囲を表示したいため
+        // this.board[i][j].allMovablePlace(this.board)
+        //this.Board[i][j].movablePlace(this.Board)
+      }
     }
 }
 

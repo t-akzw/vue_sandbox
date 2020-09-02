@@ -77,38 +77,8 @@ export default class Game extends Vue {
   hoge4(i: number) {
     return this.myHolding[i].img;
   }
-  unselect(): void {
-    console.log("unselect")
-    for (let i = 0; i < 9; i++) {
-      for (let j = 0; j < 9; j++) {
-        //console.log("xx", i, j, this.board[i][j].selected, this.board[i][j].img)
-        this.board.Board[i][j].selected = false;
-        this.board.Board[i][j].setImgString();
-        //console.log("xx", i, j, this.board[i][j].selected, this.board[i][j].img)
-      }
-    }
-  }
-  clickedBanPiece(i: number, j: number): void {
-    console.log("clickBanPiece")
-    this.unselect();
-    if (this.clickedNow !== undefined) {
-      const distance = this.clickedNow.position.distanceFrom(this.board.Board[i][j].position)
-      //console.log("dist", distance)
-      if (distance.file !== 0 || distance.rank !== 0) {
-        this.clickedNow.clicked = false; // これまで押されていた場所をunclickする
-        this.clickedNow.setImgString(); // これまで押されていた場所をunclickする
-      }
-    }
-    this.clickedNow = this.board.Board[i][j];
-    this.board.Board[i][j].clicked = !this.board.Board[i][j].clicked;
-    this.board.Board[i][j].setImgString();
-    if (!this.board.Board[i][j].disabled) {
-      this.board.Board[i][j].canMoveTo(this.board);
-    }
-    if (this.board.Board[i][j].clicked) { // clickedがtrueの時のみ移動範囲を表示したいため
-      // this.board[i][j].allMovablePlace(this.board)
-      this.board.Board[i][j].movablePlace(this.board.Board)
-    }
+  clickedBanPiece(i: number, j: number) {
+    return this.board.clickedBanPiece(i, j)
   }
   pieceStyle(i: number, j: number) {
     return this.board.Board[i][j].own? 'piece-own' : 'piece-ops'
