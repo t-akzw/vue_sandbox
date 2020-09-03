@@ -67,7 +67,6 @@ export default class Game extends Vue {
   }
 
   hoge2(i: number, j: number) {
-    console.log("hoge2", this.board.Board[i][j])
     return this.board.Board[i][j].img;
   }
 

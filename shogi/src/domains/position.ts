@@ -16,10 +16,10 @@ export class Position {
       file: position.file - this.file
     };
   }
-  getArrayPosition(position: Position) {
+  getArrayPosition(r: number, f: number) {
     return {
-      rank: position.rank - 1,
-      file: 9 - position.file
+      rank: (this.rank + r) - 1,
+      file: 9 - (this.file + f)
     }
   }
 }
