@@ -130,6 +130,8 @@ export class King extends Piece {
         Math.abs(distance.rank) < 2
       );
     }
+    movablePlace(board: BoardDomain): void {
+    }
   }
   
 export class Rook extends Piece {
