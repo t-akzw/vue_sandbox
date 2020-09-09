@@ -1,5 +1,5 @@
 import { File, Rank, Position } from "@/domains/position";
-// import { Board } from "@/domains/board";
+import { BoardDomain } from "@/domains/board";
 
 export abstract class Piece {
   public position: Position;
@@ -9,6 +9,7 @@ export abstract class Piece {
   public clicked: boolean;
   public selected: boolean;
   public disabled: boolean;
+  public name!: string;
   constructor(file: File, rank: Rank, own: boolean) {
     this.position = new Position(file, rank);
     this.own = own;
@@ -63,18 +64,58 @@ export class GoldGeneral extends Piece {
   canMoveTo(position: Position) {
     return this.defaultCanMoveTo(position);
   }
-  /*
-  movablePlace(board: Board): void {
+  movablePlace(board: BoardDomain): void {
     // ABC
     // D E
     //  F
-    board[this.position.getRank() - 1][this.position.getFile() - 1].setSelectedImg(); // A
-    board[this.position.getRank() - 1][this.position.getFile()].setSelectedImg(); // B
-    board[this.position.getRank() - 1][this.position.getFile() + 1].setSelectedImg(); // C
-    board[this.position.getRank()][this.position.getFile() - 1].setSelectedImg(); // D
-    board[this.position.getRank()][this.position.getFile() + 1].setSelectedImg(); // E
-    board[this.position.getRank() + 1][this.position.getFile()].setSelectedImg(); // F
-  }*/
+    console.log("hogehoge", board, this.position.getRank())
+    let x = [true, true, true, true, true, true]
+
+    if (this.position.getRank() < 2) { 
+      if (this.position.getFile() < 2) {
+        x = [false, false, false, true, false, true]
+      } else if (8 < this.position.getFile()) {
+        x = [false, false, false, false, true, true]
+      } else {
+        x = [false, false, false, true, true, true]
+      }
+    } else if (8 < this.position.getRank()) {
+      if (this.position.getFile() < 2) {
+        x = [true, true, false, true, false, false]
+      } else if (8 < this.position.getFile()) {
+        x = [false, true, true, false, true, false]
+      } else {
+        x = [true, true, true, true, true, false]
+      }
+    } else {
+      x = [true, true, true, true, true, true]
+    }
+    console.log("x", x)
+    if (x[0]) { // A
+      const p = this.position.getArrayPosition(-1, 1);
+      board[p.rank][p.file].setSelectedImg();
+    }
+    if (x[1]) { // B
+      const p = this.position.getArrayPosition(-1, 0);
+      board[p.rank][p.file].setSelectedImg();
+    }
+    if (x[2]) { // C
+      const p = this.position.getArrayPosition(-1, -1);
+      board[p.rank][p.file].setSelectedImg();
+    }
+    if (x[3]) { // D
+      const p = this.position.getArrayPosition(0, 1);
+      board[p.rank][p.file].setSelectedImg();
+    }
+    if (x[4]) { // E
+      const p = this.position.getArrayPosition(0, -1);
+      board[p.rank][p.file].setSelectedImg();
+    }
+    if (x[5]) { // F
+      const p = this.position.getArrayPosition(1, 0);
+      board[p.rank][p.file].setSelectedImg();
+    }
+  }
 }
 
 export class King extends Piece {
@@ -88,6 +129,8 @@ export class King extends Piece {
         Math.abs(distance.file) < 2 &&
         Math.abs(distance.rank) < 2
       );
+    }
+    movablePlace(board: BoardDomain): void {
     }
   }
   
